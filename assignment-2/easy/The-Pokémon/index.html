@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pokemon</title>
+</head>
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 1px 1px black;
+        border-radius: 5px;
+        box-shadow: 0 0 1px gray;
+
+    }
+</style>
+
+<body>
+
+    <h1>Poke mon</h1>
+    <form id="form">
+        <div class="element">
+            <label>No of Cards</label>
+            <input />
+        </div>
+        <div class="element" id="categories">
+            <!--dynamic lists -->
+        </div>
+        <div>
+            <input type="submit" />
+        </div>
+    </form>
+
+    <script>
+
+        const categoryUrl = 'https://pokeapi.co/api/v2/type'
+
+
+        window.onload = function () {
+
+            fetch(categoryUrl)
+                .then(response => response.json())
+                .then((data) => {
+                    console.log(data)
+                    data.results.map((item) => categoryCheckBox(item.name, item.url))
+
+                }).catch(error => console.error('Error:', error))
+
+
+        };
+        document.getElementById('form').addEventListener("submit", () => {
+            event.preventDefault()
+            console.log(this)
+            
+        })
+
+        function categoryCheckBox(text, url) {
+            const node = document.getElementById("categories")
+            const subNode = document.createElement('div')
+            const checkbox = document.createElement('input');
+            checkbox.setAttribute("type", "checkbox");
+            checkbox.setAttribute("id", text);
+            checkbox.setAttribute("value", url)
+            checkbox.setAttribute("class", "cat-checkbox")
+            
+
+
+            subNode.appendChild(checkbox);
+
+            const label = document.createElement('label')
+            label.textContent = text
+            subNode.appendChild(label)
+            node.appendChild(subNode);
+
+        }
+    </script>
+
+</body>
+
+</html>
