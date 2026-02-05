@@ -25,19 +25,23 @@
     <form id="form">
         <div class="element">
             <label>No of Cards</label>
-            <input />
+            <input onchange="onNoOfCardChange(this)" />
         </div>
         <div class="element" id="categories">
             <!--dynamic lists -->
         </div>
         <div>
-            <input type="submit" />
+            <input type="submit" id='submit-button' />
         </div>
     </form>
+
+
 
     <script>
 
         const categoryUrl = 'https://pokeapi.co/api/v2/type'
+        const selectedCategories = {}
+        const noOfCards = 0
 
 
         window.onload = function () {
@@ -52,10 +56,30 @@
 
 
         };
-        document.getElementById('form').addEventListener("submit", () => {
+
+        function onCheckCategories(element) {
+            if (element.checked) {
+                selectedCategories[element.id] = element.value
+            } else {
+                delete selectedCategories[element.id]
+            }
+            console.log(selectedCategories)
+        }
+
+        function onNoOfCardChange(element) {
+            noOfCards = element.value
+
+        }
+
+        document.getElementById('submit-button').addEventListener("click", (event) => {
             event.preventDefault()
-            console.log(this)
-            
+
+            const promises = Object.values(selectedCategories).map((i) => fetch(i).then((r)=>r.json()))
+
+
+            const result = Promise.all(promises)
+                .then((result) =>)
+                .catch(err => console.log(err))
         })
 
         function categoryCheckBox(text, url) {
@@ -66,7 +90,9 @@
             checkbox.setAttribute("id", text);
             checkbox.setAttribute("value", url)
             checkbox.setAttribute("class", "cat-checkbox")
-            
+            checkbox.setAttribute("onclick", "onCheckCategories(this)")
+
+
 
 
             subNode.appendChild(checkbox);
