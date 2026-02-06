@@ -17,53 +17,91 @@
         box-shadow: 0 0 1px gray;
 
     }
+
+    .cards {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        padding: 10px;
+
+    }
+    .card{
+        border:1px 1px black;
+        border-radius: 5px;
+        box-shadow:0 0 1px gray;
+    }
 </style>
 
 <body>
 
-    <h1>Poke mon</h1>
-    <form id="form">
+    <h1>Pokemon</h1>
+
+    <form id="pokemon-form">
         <div class="element">
             <label>No of Cards</label>
             <input onchange="onNoOfCardChange(this)" />
         </div>
         <div class="element" id="categories">
-            <!--dynamic lists -->
+            <!-- Dynamic Categories-->
         </div>
         <div>
             <input type="submit" id='submit-button' />
         </div>
     </form>
 
-
-
+    <div class="cards">
+        <!--Dynamic Cards-->
+    </div>
     <script>
 
-        const categoryUrl = 'https://pokeapi.co/api/v2/type'
-        const selectedCategories = {}
-        const noOfCards = 0
+        const categoryUrl = 'https://pokeapi.co/api/v2/type';
+        const selectedCategories = {};
+        let noOfCards = 0;
 
+        const categoryContainer = document.getElementById("categories")
+        const cardsContainer = document.querySelector(".cards");
 
         window.onload = function () {
-
             fetch(categoryUrl)
                 .then(response => response.json())
                 .then((data) => {
-                    console.log(data)
                     data.results.map((item) => categoryCheckBox(item.name, item.url))
-
-                }).catch(error => console.error('Error:', error))
-
-
+                }).catch(error => console.error('Error: ', error))
         };
 
-        function onCheckCategories(element) {
+        document.getElementById('submit-button').addEventListener("click", (event) => {
+            event.preventDefault()
+
+            cardsContainer.replaceChildren()
+
+            const promises = Object.values(selectedCategories).map((i) => fetch(i).then((r) => r.json()))
+
+            Promise.all(promises)
+                .then((response) => response.map(i => i.pokemon))
+                .then((response) => {
+                    if (noOfCards !== 0) {
+                        return response.map((i) => i.splice(0, noOfCards))
+                    }
+                    return response;
+                }).then((response) => {
+                    console.log(response)
+                    response.forEach((item) =>
+                        item.map((t) =>
+                            fetch(t.pokemon.url).then((response) =>
+                                response.json()).then(
+                                    (response) =>
+                                        createCard(t.pokemon.name, response)
+                                )
+                        )
+                    )
+                }).catch(err => console.log('Error: ', err))
+        })
+
+        function onSelectCategory(element) {
             if (element.checked) {
                 selectedCategories[element.id] = element.value
             } else {
                 delete selectedCategories[element.id]
             }
-            console.log(selectedCategories)
         }
 
         function onNoOfCardChange(element) {
@@ -71,38 +109,45 @@
 
         }
 
-        document.getElementById('submit-button').addEventListener("click", (event) => {
-            event.preventDefault()
-
-            const promises = Object.values(selectedCategories).map((i) => fetch(i).then((r)=>r.json()))
-
-
-            const result = Promise.all(promises)
-                .then((result) =>)
-                .catch(err => console.log(err))
-        })
-
         function categoryCheckBox(text, url) {
-            const node = document.getElementById("categories")
-            const subNode = document.createElement('div')
-            const checkbox = document.createElement('input');
-            checkbox.setAttribute("type", "checkbox");
-            checkbox.setAttribute("id", text);
-            checkbox.setAttribute("value", url)
-            checkbox.setAttribute("class", "cat-checkbox")
-            checkbox.setAttribute("onclick", "onCheckCategories(this)")
+            const checkboxContainer = document.createElement('div')
+            const checkboxElement = document.createElement('input');
+            const labelElement = document.createElement('label')
 
+            checkboxElement.setAttribute("type", "checkbox");
+            checkboxElement.setAttribute("id", text);
+            checkboxElement.setAttribute("value", url)
+            checkboxElement.setAttribute("class", "cat-checkbox")
+            checkboxElement.setAttribute("onclick", "onSelectCategory(this)")
 
+            checkboxContainer.appendChild(checkboxElement);
 
+            
+            labelElement.textContent = text
 
-            subNode.appendChild(checkbox);
-
-            const label = document.createElement('label')
-            label.textContent = text
-            subNode.appendChild(label)
-            node.appendChild(subNode);
-
+            checkboxContainer.appendChild(labelElement)
+            categoryContainer.appendChild(checkboxContainer);
         }
+
+        function createCard(name, data) {
+            console.log(data)
+            const cardContainer = document.createElement('div')
+            const nameLabelElement = document.createElement('p')
+            const abilityLabelElement = document.createElement('p')
+
+            cardContainer.setAttribute('class','card')
+
+            nameLabelElement.innerText = `Name : ${name}`
+            abilityLabelElement.innerText = `Abilities:${data.abilities.map((i) => i.ability.name).join(',')}`
+            
+            
+            cardContainer.appendChild(nameLabelElement)
+            cardContainer.appendChild(abilityLabelElement)
+            cardsContainer.append(cardContainer)
+        }
+
+    
+
     </script>
 
 </body>
