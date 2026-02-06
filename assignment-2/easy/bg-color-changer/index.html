@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BG-Color-Changer</title>
     <style>
         body {
             background-color: white;
@@ -12,8 +12,8 @@
             flex-direction: column;
         }
 
-        .color-panel {
-            height: 70px;
+        .container {
+            height: 50px;
             width: auto;
             box-shadow: 0px 0px 10px gray;
             border-radius: 5px;
@@ -22,16 +22,19 @@
             align-items: center;
             justify-content: space-between;
             padding-inline: 30px;
+            margin-inline: 300px;
+            margin-top: 40%;
+
 
         }
 
         .color {
-            height: 50px;
-            width: 50px;
-            background-color: red;
+            height: 30px;
+            width: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -39,30 +42,80 @@
 <body>
 
 
-    <div class="color-panel">
-
-        <button class="color" id="red">
-            red
+    <div class="container" id="color-container">
+        <button class="color" value="red" style="background-color: red;">
+            Red
         </button>
 
-        <button class="color" id="blue">
-            blue
+        <button class="color" value="yellow" style="background-color: yellow;">
+            Yellow
         </button>
 
-        <button class="color" id="green">
+        <button class="color" value="black" style="background-color:black;color: white;">
+            Black
+        </button>
+
+        <button class="color" value="purple" style="background-color:purple;">
+            purple
+        </button>
+
+        <button class="color" value="green" style="background-color:green;">
             Green
         </button>
 
+        <button class="color" value="blue" style="background-color:blue;color:white;">
+            Blue
+        </button>
+        <button class="color" value="orange" style="background-color:orange;">
+            Default
+        </button>
+
+
+    </div>
+    <div class="color">
+        <input type="color" id="colorPallet" />
+        <input type="button" value="+" id="addColorBtn" />
+        <div id="value" hidden></div>
     </div>
     <script>
-        /* Logic
-    1) refer the existing button
-    2) add event handler
-    3) when press button color change 
-        */
-       const colors=document.querySelectorAll('.color')
-       colors.forEach((i)=>i.addEventListener("click",()=>console.log(i.id)))
-       console.log(colors)
+        const colors = document.querySelectorAll(".color")
+        const addColorButton = document.getElementById("addColorBtn")
+        const colorPalletInput = document.getElementById("colorPallet")
+        const colorContainer = document.querySelector("#color-container")
+        const colorValue = document.getElementById("value")
+
+        colors.forEach((i) => i.addEventListener("click", onColorClickHandler))
+
+
+        colorPalletInput.addEventListener("input", function () {
+            document.getElementById('value').innerText = event.currentTarget.value
+
+        })
+
+        addColorButton.addEventListener("click", () => {
+            insertColorButton(colorValue.innerText)
+
+        })
+
+        function onColorClickHandler() {
+            const element = event.currentTarget
+            document.body.style.backgroundColor = element.value
+        }
+
+        function insertColorButton(colorCode) {
+            if (colorCode) {
+                const colorButton = document.createElement('button');
+
+                colorButton.setAttribute("value", colorCode)
+                colorButton.setAttribute("class", "color")
+                colorButton.addEventListener("click", onColorClickHandler)
+                colorButton.innerText = colorCode
+                colorButton.style.backgroundColor = colorCode
+
+                colorContainer.appendChild(colorButton)
+            }
+        }
+
     </script>
 </body>
 
