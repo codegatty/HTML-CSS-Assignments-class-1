@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Builder</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-builder">
+            <form>
+                <div>
+                    <label>Select Field Type</label>
+                    <select id="selected-type">
+                        <option value="button">Button</option>
+                        <option value="checkbox">Checkbox</option>
+                        <option value="date">Date</option>
+                        <option value="email">Email</option>
+                        <option value="file">File</option>
+                        <option value="number">Number</option>
+                        <option value="password">Password</option>
+                        <option value="tel">Telephone No</option>
+                        <option value="text">Text</option>
+                        <option value="url">Url</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Field Label</label>
+                    <input type="text" id="selected-type-label-text" />
+                </div>
+                <input type="submit" id="submit" />
+            </form>
+        </div>
+
+        <div class="form-preview">
+            <!-- dynamic elements here -->
+        </div>
+    </div>
+
+    <script src="index.js" type="module" />
+</body>
+
+</html>
