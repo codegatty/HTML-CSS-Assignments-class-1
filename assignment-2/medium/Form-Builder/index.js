@@ -12,7 +12,6 @@ function main() {
     const labelText = selectedTypeLabelTextEle.value;
 
     const formElement = createDynamicFormComponent(selectedType, labelText);
-    console.log(formElement);
     formPreviewEle.appendChild(formElement);
   });
 }

@@ -5,13 +5,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Builder</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+         
+        }
+
+        .container{
+            
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .sub-container{
+            flex: 1;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 5px;
+            margin: 10px;
+        }
+        .form-builder h2{
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        
+        .element{
+            font-size: 18px;
+            font-weight: bold;
+            padding: 50px;
+            display: flex;
+        }
+
+
+        .form-preview{
+            flex: 1;
+        }
+
+        
+
+        
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="form-builder">
+        <div class="sub-container form-builder">
+            <h2>Form Builder</h2>
             <form>
-                <div>
+                <div class="element">
+                    
                     <label>Select Field Type</label>
                     <select id="selected-type">
                         <option value="button">Button</option>
@@ -26,7 +75,7 @@
                         <option value="url">Url</option>
                     </select>
                 </div>
-                <div>
+                <div class="element">
                     <label>Field Label</label>
                     <input type="text" id="selected-type-label-text" />
                 </div>
@@ -34,7 +83,8 @@
             </form>
         </div>
 
-        <div class="form-preview" id="form-preview">
+        <div class="sub-container form-preview" id="form-preview">
+            <h2>Form Preview</h2>
             <!-- dynamic elements here -->
         </div>
     </div>
